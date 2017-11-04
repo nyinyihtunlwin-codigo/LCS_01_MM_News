@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_publication_logo"
+        android:layout_width="@dimen/logo_size"
+        android:layout_height="@dimen/logo_size"
+        android:layout_margin="@dimen/margin_card_medium_2"
+        android:src="@drawable/img_publication_logo_placeholder" />
+
+    <TextView
+        android:id="@+id/tv_publication_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/iv_publication_logo"
+        android:layout_marginTop="@dimen/margin_card_medium"
+        android:layout_toRightOf="@id/iv_publication_logo"
+        android:text="Eleven Media"
+        android:textColor="@color/primary_text" />
+
+    <TextView
+        android:id="@+id/tv_publish_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_publication_name"
+        android:layout_marginTop="@dimen/margin_card_medium"
+        android:layout_toRightOf="@id/iv_publication_logo"
+        android:text="Posted At : Jan01 - 06:30AM"
+        android:textColor="@color/secondary_text" />
+
+    <ImageView
+        android:id="@+id/iv_favourite_news"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:padding="@dimen/margin_medium_2"
+        android:src="@drawable/ic_favorite_border_24dp" />
+
+    <TextView
+        android:id="@+id/tv_brief_news"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_publication_logo"
+        android:layout_marginLeft="@dimen/margin_medium"
+        android:layout_marginRight="@dimen/margin_medium"
+        android:text="@string/dummy_news"
+        android:textColor="@color/primary_text" />
+</RelativeLayout>
