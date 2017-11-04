@@ -1,4 +1,4 @@
-package projects.nyinyihtunlwin.mm_news;
+package projects.nyinyihtunlwin.news.activities;
 
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -6,6 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+
+import projects.nyinyihtunlwin.news.R;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package projects.nyinyihtunlwin.mm_news;
+package projects.nyinyihtunlwin.news;
 
 import org.junit.Test;
 
