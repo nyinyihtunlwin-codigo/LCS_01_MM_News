@@ -1,5 +1,6 @@
 package projects.nyinyihtunlwin.news.activities;
 
+import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -11,8 +12,9 @@ import android.view.View;
 
 import projects.nyinyihtunlwin.news.R;
 import projects.nyinyihtunlwin.news.adapters.NewsAdapter;
+import projects.nyinyihtunlwin.news.delegates.NewsItemDelegate;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NewsItemDelegate {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +33,34 @@ public class MainActivity extends AppCompatActivity {
         });
         RecyclerView rvNews = findViewById(R.id.rv_news);
         rvNews.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-        NewsAdapter adapter = new NewsAdapter(getApplicationContext());
+        NewsAdapter adapter = new NewsAdapter(getApplicationContext(), this);
         rvNews.setAdapter(adapter);
 
+    }
+
+    @Override
+    public void onTapComment() {
+
+    }
+
+    @Override
+    public void onTapSentTo() {
+
+    }
+
+    @Override
+    public void onTapFavourite() {
+
+    }
+
+    @Override
+    public void onTapStatistics() {
+
+    }
+
+    @Override
+    public void onTapNews() {
+        Intent intent = NewsDetailsActivity.newIntent(getApplicationContext());
+        startActivity(intent);
     }
 }

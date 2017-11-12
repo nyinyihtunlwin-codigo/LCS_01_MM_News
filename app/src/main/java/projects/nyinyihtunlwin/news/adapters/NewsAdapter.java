@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import projects.nyinyihtunlwin.news.R;
+import projects.nyinyihtunlwin.news.delegates.NewsItemDelegate;
 import projects.nyinyihtunlwin.news.viewholders.NewsViewHolder;
 
 /**
@@ -16,9 +17,11 @@ import projects.nyinyihtunlwin.news.viewholders.NewsViewHolder;
 public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
 
     private LayoutInflater layoutInflater;
+    private NewsItemDelegate newsItemDelegate;
 
-    public NewsAdapter(Context context) {
+    public NewsAdapter(Context context, NewsItemDelegate newsItemDelegate) {
         layoutInflater = LayoutInflater.from(context);
+        this.newsItemDelegate = newsItemDelegate;
     }
 
     @Override
@@ -26,7 +29,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsViewHolder> {
         // can use below style , no difference from above constructor
         //  LayoutInflater layoutInflater = LayoutInflater.from(context);
         View view = layoutInflater.inflate(R.layout.view_item_news, parent, false);
-        return new NewsViewHolder(view);
+        return new NewsViewHolder(view, newsItemDelegate);
     }
 
     @Override
