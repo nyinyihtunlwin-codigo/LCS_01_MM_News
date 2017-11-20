@@ -35,5 +35,6 @@
     <!-- App Specific values -->
     <dimen name="logo_size">80dp</dimen>
     <dimen name="size_tappable_small">48dp</dimen>
+    <dimen name="button_large_size">54dp</dimen>
 
 </resources>

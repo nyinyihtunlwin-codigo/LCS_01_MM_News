@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="220dp">
+
+    <ImageView
+        android:id="@+id/iv_login_user_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/dummy_news_1"
+        android:scaleType="centerCrop" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#a000" />
+
+    <ImageView
+        android:id="@+id/iv_login_user"
+        android:layout_width="@dimen/logo_size"
+        android:layout_height="@dimen/logo_size"
+        android:layout_margin="@dimen/margin_xlarge"
+        android:src="@drawable/dummy_user_picture" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/iv_login_user"
+        android:layout_toRightOf="@id/iv_login_user"
+        android:maxLines="1"
+        android:text="Nyi Nyi"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_regular_3x" />
+
+    <TextView
+        android:id="@+id/tv_phone_no"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@id/tv_name"
+        android:layout_below="@id/tv_name"
+        android:layout_marginTop="@dimen/margin_small"
+        android:text="09272772727"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_regular" />
+
+    <Button
+        android:id="@+id/btn_logout"
+        style="@style/AccentButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/margin_large"
+        android:text="Logout" />
+
+</RelativeLayout>
