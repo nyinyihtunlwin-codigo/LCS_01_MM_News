@@ -107,7 +107,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_related_news"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/rv_related_news_size"
                 android:layout_below="@id/tv_related_news"
                 android:paddingBottom="80dp" />
 
