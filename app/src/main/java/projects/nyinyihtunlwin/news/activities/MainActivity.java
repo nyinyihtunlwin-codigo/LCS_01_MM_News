@@ -3,11 +3,13 @@ package projects.nyinyihtunlwin.news.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
@@ -15,6 +17,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.news.R;
 import projects.nyinyihtunlwin.news.adapters.NewsAdapter;
+import projects.nyinyihtunlwin.news.components.EmptyViewPod;
+import projects.nyinyihtunlwin.news.components.SmartRecyclerView;
 import projects.nyinyihtunlwin.news.delegates.NewsItemDelegate;
 
 public class MainActivity extends AppCompatActivity implements NewsItemDelegate {
@@ -22,6 +26,12 @@ public class MainActivity extends AppCompatActivity implements NewsItemDelegate 
 
     @BindView(R.id.drawer_layout)
     DrawerLayout drawerLayout;
+
+    @BindView(R.id.rv_news)
+    SmartRecyclerView rvNews;
+
+    @BindView(R.id.vp_empty_news)
+    EmptyViewPod vpEmptyNews;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,10 +50,11 @@ public class MainActivity extends AppCompatActivity implements NewsItemDelegate 
                 drawerLayout.openDrawer(GravityCompat.END); // where to start open (drawer / navigation view)
             }
         });
-        RecyclerView rvNews = findViewById(R.id.rv_news);
+
         rvNews.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
         NewsAdapter adapter = new NewsAdapter(getApplicationContext(), this);
         rvNews.setAdapter(adapter);
+        rvNews.setEmptyView(vpEmptyNews);
     }
 
     @Override
@@ -67,8 +78,22 @@ public class MainActivity extends AppCompatActivity implements NewsItemDelegate 
     }
 
     @Override
-    public void onTapNews() {
+    public void onTapNews(View view) {
         Intent intent = NewsDetailsActivity.newIntent(getApplicationContext());
-        startActivity(intent);
+        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                // the context of the activity
+                MainActivity.this,
+
+                // For each shared element, add to this method a new Pair item,
+                // which contains the reference of the view we are transitioning *from*,
+                // and the value of the transitionName attribute
+                new Pair<View, String>(view.findViewById(R.id.iv_publication_logo),
+                        getString(R.string.transition_name_publication_logo)),
+                new Pair<View, String>(view.findViewById(R.id.tv_publication_name),
+                        getString(R.string.transition_name_publication_name)),
+                new Pair<View, String>(view.findViewById(R.id.tv_publish_date),
+                        getString(R.string.transition_name_publish_date))
+        );
+        ActivityCompat.startActivity(MainActivity.this, intent, options.toBundle());
     }
 }

@@ -20,7 +20,8 @@
             android:layout_alignParentTop="true"
             android:layout_alignStart="@+id/tv_brief_news"
             android:layout_margin="@dimen/margin_card_medium"
-            android:src="@drawable/img_publication_logo_placeholder" />
+            android:src="@drawable/img_publication_logo_placeholder"
+            android:transitionName="@string/transition_name_publication_logo" />
 
         <TextView
             android:id="@+id/tv_publication_name"
@@ -32,7 +33,8 @@
             android:layout_toRightOf="@id/iv_publication_logo"
             android:text="Eleven Media"
             android:textColor="@color/primary_text"
-            android:textSize="@dimen/text_regular_2x" />
+            android:textSize="@dimen/text_regular_2x"
+            android:transitionName="@string/transition_name_publication_name" />
 
         <TextView
             android:id="@+id/tv_publish_date"
@@ -44,7 +46,8 @@
             android:layout_toRightOf="@id/iv_publication_logo"
             android:text="Posted At : Jan01 - 06:30AM"
             android:textColor="@color/secondary_text"
-            android:textSize="@dimen/text_regular" />
+            android:textSize="@dimen/text_regular"
+            android:transitionName="@string/transition_name_publish_date" />
 
         <ImageView
             android:id="@+id/iv_favourite_news"

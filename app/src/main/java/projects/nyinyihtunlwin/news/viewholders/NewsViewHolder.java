@@ -12,13 +12,13 @@ import projects.nyinyihtunlwin.news.delegates.NewsItemDelegate;
 public class NewsViewHolder extends RecyclerView.ViewHolder {
     private NewsItemDelegate mNewsItemDelegate;
 
-    public NewsViewHolder(View itemView, final NewsItemDelegate newsItemDelegate) {
+    public NewsViewHolder(final View itemView, final NewsItemDelegate newsItemDelegate) {
         super(itemView);
         mNewsItemDelegate = newsItemDelegate;
         itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mNewsItemDelegate.onTapNews();
+                mNewsItemDelegate.onTapNews(itemView);
             }
         });
     }

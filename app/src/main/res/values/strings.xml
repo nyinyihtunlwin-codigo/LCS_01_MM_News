@@ -22,4 +22,11 @@
     <string name="favourite_news">Favourite News</string>
     <string name="related_news">Related News</string>
     <string name="dummy_related_news">IS အဖွဲ့သည် မပျက်သုဉ်းသေးသော်လည်း မွတ်စလင်ပိုင်နက်ထူထောင်ရန် စိတ်ကူးသည် ပျက်ပြားသွားပြီဖြစ်</string>
+
+    <string name="transition_name_publication_logo">transition:PUBLICATION_LOGO</string>
+    <string name="transition_name_publication_name">transition:PUBLICATION_NAME</string>
+    <string name="transition_name_publish_date">transition:PUBLISH_DATE</string>
+    <string name="transition_name_favourite_logo">transition:PUBLICATION_NEWS_FAVOURITE</string>
+    <string name="msg_generic_no_data">No Data To Display</string>
+    <string name="lbl_refersh">Refresh</string>
 </resources>

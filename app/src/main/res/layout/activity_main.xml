@@ -34,10 +34,16 @@
             tools:context="projects.nyinyihtunlwin.news.activities.MainActivity"
             tools:showIn="@layout/activity_main">
 
-            <android.support.v7.widget.RecyclerView
+            <projects.nyinyihtunlwin.news.components.SmartRecyclerView
                 android:id="@+id/rv_news"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
+            <include
+                android:id="@+id/vp_empty_news"
+                layout="@layout/view_pod_empty"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
 
         </RelativeLayout>
 

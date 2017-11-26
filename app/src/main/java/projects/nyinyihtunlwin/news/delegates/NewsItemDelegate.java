@@ -1,5 +1,7 @@
 package projects.nyinyihtunlwin.news.delegates;
 
+import android.view.View;
+
 /**
  * Created by Dell on 11/11/2017.
  */
@@ -13,5 +15,5 @@ public interface NewsItemDelegate {
 
     void onTapStatistics();
 
-    void onTapNews();
+    void onTapNews(View view);
 }

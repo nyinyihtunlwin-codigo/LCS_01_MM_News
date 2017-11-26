@@ -42,7 +42,7 @@ public class NewsDetailsActivity extends AppCompatActivity {
 
 
         RecyclerView rvRelatedNews = findViewById(R.id.rv_related_news);
-        rvRelatedNews.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
+        rvRelatedNews.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
         RelatedNewsAdapter relatedNewsAdapter = new RelatedNewsAdapter(getApplicationContext());
         rvRelatedNews.setAdapter(relatedNewsAdapter);
     }
