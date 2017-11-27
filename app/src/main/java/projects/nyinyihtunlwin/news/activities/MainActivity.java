@@ -3,6 +3,7 @@ package projects.nyinyihtunlwin.news.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
@@ -19,6 +20,7 @@ import projects.nyinyihtunlwin.news.R;
 import projects.nyinyihtunlwin.news.adapters.NewsAdapter;
 import projects.nyinyihtunlwin.news.components.EmptyViewPod;
 import projects.nyinyihtunlwin.news.components.SmartRecyclerView;
+import projects.nyinyihtunlwin.news.components.SmartScrollListener;
 import projects.nyinyihtunlwin.news.delegates.NewsItemDelegate;
 
 public class MainActivity extends AppCompatActivity implements NewsItemDelegate {
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements NewsItemDelegate 
 
     @BindView(R.id.vp_empty_news)
     EmptyViewPod vpEmptyNews;
+
+    private SmartScrollListener mSmartScrollListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,14 +51,23 @@ public class MainActivity extends AppCompatActivity implements NewsItemDelegate 
             public void onClick(View view) {
        /*         Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
-                drawerLayout.openDrawer(GravityCompat.END); // where to start open (drawer / navigation view)
+                //        drawerLayout.openDrawer(GravityCompat.END); // where to start open (drawer / navigation view)
+                Intent intent = LoginRegisterActivity.newIntent(getApplicationContext());
+                startActivity(intent);
             }
         });
-
+        rvNews.setEmptyView(vpEmptyNews);
         rvNews.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
         NewsAdapter adapter = new NewsAdapter(getApplicationContext(), this);
         rvNews.setAdapter(adapter);
-        rvNews.setEmptyView(vpEmptyNews);
+
+        mSmartScrollListener = new SmartScrollListener(new SmartScrollListener.OnSmartScrollListener() {
+            @Override
+            public void onListEndReached() {
+                Snackbar.make(rvNews, "This is all the data for Now.", Snackbar.LENGTH_LONG).show();
+            }
+        });
+        rvNews.addOnScrollListener(mSmartScrollListener);
     }
 
     @Override

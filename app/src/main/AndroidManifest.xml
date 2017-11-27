@@ -25,6 +25,9 @@
             android:theme="@style/AppTheme.NoActionBar">
 
         </activity>
+        <activity
+            android:name=".activities.LoginRegisterActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <receiver android:name=".receiver.InternetStateReceiver">
             <intent-filter>
