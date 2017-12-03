@@ -14,6 +14,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.news.R;
@@ -22,8 +26,10 @@ import projects.nyinyihtunlwin.news.components.EmptyViewPod;
 import projects.nyinyihtunlwin.news.components.SmartRecyclerView;
 import projects.nyinyihtunlwin.news.components.SmartScrollListener;
 import projects.nyinyihtunlwin.news.delegates.NewsItemDelegate;
+import projects.nyinyihtunlwin.news.events.RestApiEvents;
+import projects.nyinyihtunlwin.news.events.TapNewsEvent;
 
-public class MainActivity extends AppCompatActivity implements NewsItemDelegate {
+public class MainActivity extends BaseActivity implements NewsItemDelegate {
 
 
     @BindView(R.id.drawer_layout)
@@ -34,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements NewsItemDelegate 
 
     @BindView(R.id.vp_empty_news)
     EmptyViewPod vpEmptyNews;
+
+    private NewsAdapter newsAdapter;
 
     private SmartScrollListener mSmartScrollListener;
 
@@ -58,8 +66,8 @@ public class MainActivity extends AppCompatActivity implements NewsItemDelegate 
         });
         rvNews.setEmptyView(vpEmptyNews);
         rvNews.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-        NewsAdapter adapter = new NewsAdapter(getApplicationContext(), this);
-        rvNews.setAdapter(adapter);
+        newsAdapter = new NewsAdapter(getApplicationContext(), this);
+        rvNews.setAdapter(newsAdapter);
 
         mSmartScrollListener = new SmartScrollListener(new SmartScrollListener.OnSmartScrollListener() {
             @Override
@@ -108,5 +116,33 @@ public class MainActivity extends AppCompatActivity implements NewsItemDelegate 
                         getString(R.string.transition_name_publish_date))
         );
         ActivityCompat.startActivity(MainActivity.this, intent, options.toBundle());
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onTapNewsEvent(TapNewsEvent event) {
+        Intent intent = NewsDetailsActivity.newIntent(getApplicationContext());
+        startActivity(intent);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onNewsDataLoaded(RestApiEvents.NewsDataLoadedEvent event) {
+        newsAdapter.appendNewData(event.getLoadedNews());
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onErrorInvokingAPI(RestApiEvents.ErrorInvokingAPIEvent event) {
+        Snackbar.make(rvNews, event.getErrorMsg(), Snackbar.LENGTH_INDEFINITE).show();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }

@@ -16,7 +16,7 @@ import projects.nyinyihtunlwin.news.delegates.LoginRegisterDeligate;
  * Created by Dell on 11/26/2017.
  */
 
-public class RegisterFragment extends Fragment {
+public class RegisterFragment extends BaseFragment {
 
     private LoginRegisterDeligate registerDeligate;
 

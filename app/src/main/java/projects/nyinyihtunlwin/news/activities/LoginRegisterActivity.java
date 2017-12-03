@@ -19,7 +19,7 @@ import projects.nyinyihtunlwin.news.fragments.RegisterFragment;
  * Created by Dell on 11/26/2017.
  */
 
-public class LoginRegisterActivity extends AppCompatActivity implements LoginRegisterDeligate {
+public class LoginRegisterActivity extends BaseActivity implements LoginRegisterDeligate {
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
