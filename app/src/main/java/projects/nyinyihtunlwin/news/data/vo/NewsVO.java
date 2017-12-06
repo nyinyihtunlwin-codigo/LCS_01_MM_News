@@ -36,4 +36,40 @@ public class NewsVO {
 
     @SerializedName("sent-tos")
     private List<SendToVO> sendTos;
+
+    public String getNewsId() {
+        return newsId;
+    }
+
+    public String getBrief() {
+        return brief;
+    }
+
+    public String getDetails() {
+        return details;
+    }
+
+    public List<String> getImages() {
+        return images;
+    }
+
+    public String getPostedDate() {
+        return postedDate;
+    }
+
+    public PublicationVO getPublication() {
+        return publication;
+    }
+
+    public List<FavouriteActionVO> getFavourites() {
+        return favourites;
+    }
+
+    public List<CommentVO> getComments() {
+        return comments;
+    }
+
+    public List<SendToVO> getSendTos() {
+        return sendTos;
+    }
 }
