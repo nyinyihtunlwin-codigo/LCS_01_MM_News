@@ -64,6 +64,8 @@ public class NewsViewHolder extends BaseViewHolder<NewsVO> {
         Glide.with(itemView.getRootView().getContext()).load(publicationVO.getLogo()).apply(requestOptions).into(ivPublicationLogo);
         if (data.getImages() != null && data.getImages().size() >= 1) {
             Glide.with(itemView.getRootView().getContext()).load(data.getImages().get(0)).apply(requestOptions).into(ivNewsHeroImage);
+        }else {
+            ivNewsHeroImage.setVisibility(View.GONE);
         }
         if (data.getComments() != null && data.getComments().size() >= 1) {
             if (data.getSendTos() != null && data.getSendTos().size() >= 1) {
