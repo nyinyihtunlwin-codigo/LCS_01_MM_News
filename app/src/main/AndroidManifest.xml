@@ -3,7 +3,8 @@
     package="projects.nyinyihtunlwin.news">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".SFCNewsApp"
         android:allowBackup="true"
@@ -35,6 +36,11 @@
                 <action android:name="android.net.conn.CONNNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
+        <provider
+            android:name=".persistence.MMNewsProvider"
+            android:authorities="projects.nyinyihtunlwin.news"
+            android:exported="false"
+            android:syncable="true" />
     </application>
 
 </manifest>

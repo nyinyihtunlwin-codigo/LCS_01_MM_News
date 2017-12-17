@@ -1,6 +1,10 @@
 package projects.nyinyihtunlwin.news.data.vo;
 
+import android.content.ContentValues;
+
 import com.google.gson.annotations.SerializedName;
+
+import projects.nyinyihtunlwin.news.persistence.MMNewsContract;
 
 /**
  * Created by Dell on 12/3/2017.
@@ -34,5 +38,19 @@ class SendToVO {
 
     public ActedUserVO getReceivedUser() {
         return receivedUser;
+    }
+
+
+    public ContentValues parseToContentValues(String newsId) {
+
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(MMNewsContract.SendToEntry.COLUMN_SENT_TO_ID, sendToId);
+        contentValues.put(MMNewsContract.SendToEntry.COLUMN_SENT_DATE, sentDate);
+        contentValues.put(MMNewsContract.SendToEntry.COLUMN_NEWS_ID, newsId);
+        contentValues.put(MMNewsContract.SendToEntry.COLUMN_SENDER_ID, actedUser.getUserId());
+        contentValues.put(MMNewsContract.SendToEntry.COLUMN_RECEIVER_ID, receivedUser.getUserId());
+
+        return contentValues;
     }
 }

@@ -1,6 +1,10 @@
 package projects.nyinyihtunlwin.news.data.vo;
 
+import android.content.ContentValues;
+
 import com.google.gson.annotations.SerializedName;
+
+import projects.nyinyihtunlwin.news.persistence.MMNewsContract;
 
 /**
  * Created by Dell on 12/3/2017.
@@ -27,5 +31,16 @@ public class FavouriteActionVO {
 
     public ActedUserVO getActedUser() {
         return actedUser;
+    }
+
+    public ContentValues parseToContentValues(String newsId) {
+        ContentValues contentValues = new ContentValues();
+
+        contentValues.put(MMNewsContract.FavoriteActionEntry.COLUMN_FAVORITE_ID, favouriteId);
+        contentValues.put(MMNewsContract.FavoriteActionEntry.COLUMN_FAVORITE_DATE, favouriteDate);
+        contentValues.put(MMNewsContract.FavoriteActionEntry.COLUMN_USER_ID, actedUser.getUserId());
+        contentValues.put(MMNewsContract.FavoriteActionEntry.COLUMN_NEWS_ID, newsId);
+
+        return contentValues;
     }
 }

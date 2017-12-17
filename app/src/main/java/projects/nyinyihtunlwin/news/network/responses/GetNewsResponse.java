@@ -6,12 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import projects.nyinyihtunlwin.news.data.vo.NewsVO;
+import projects.nyinyihtunlwin.news.network.MMNewsResponse;
 
 /**
  * Created by Dell on 12/3/2017.
  */
 
-public class GetNewsResponse {
+public class GetNewsResponse extends MMNewsResponse{
 
     @SerializedName("code")
     private int code;

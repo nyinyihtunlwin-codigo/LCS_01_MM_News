@@ -53,18 +53,18 @@ public class NewsViewHolder extends BaseViewHolder<NewsVO> {
 
     @Override
     public void setData(NewsVO data) {
-        StringBuilder sb = new StringBuilder();
+/*        StringBuilder sb = new StringBuilder();
         PublicationVO publicationVO = data.getPublication();
         tvPublictionName.setText(publicationVO.getTitle());
-        tvPublishDate.setText(data.getPostedDate());
+        tvPublishDate.setText(data.getPostedDate());*/
         tvBriefNews.setText(data.getBrief());
-        RequestOptions requestOptions = new RequestOptions()
+   /*     RequestOptions requestOptions = new RequestOptions()
                 .placeholder(R.drawable.img_publication_logo_placeholder)
                 .centerCrop();
         Glide.with(itemView.getRootView().getContext()).load(publicationVO.getLogo()).apply(requestOptions).into(ivPublicationLogo);
         if (data.getImages() != null && data.getImages().size() >= 1) {
             Glide.with(itemView.getRootView().getContext()).load(data.getImages().get(0)).apply(requestOptions).into(ivNewsHeroImage);
-        }else {
+        } else {
             ivNewsHeroImage.setVisibility(View.GONE);
         }
         if (data.getComments() != null && data.getComments().size() >= 1) {
@@ -75,9 +75,9 @@ public class NewsViewHolder extends BaseViewHolder<NewsVO> {
                     sb.append(data.getComments().size() + " Comments - Sent to " + data.getSendTos().size() + " people");
                 }
             } else {
-                if(data.getComments().size()>1){
+                if (data.getComments().size() > 1) {
                     sb.append(data.getComments().size() + " Comments");
-                }else {
+                } else {
                     sb.append(data.getComments().size() + " Comment");
                 }
             }
@@ -96,7 +96,7 @@ public class NewsViewHolder extends BaseViewHolder<NewsVO> {
         } else {
             sb.append("");
         }
-        tvNewsStatisticalData.setText(sb.toString());
+        tvNewsStatisticalData.setText(sb.toString());*/
     }
 
     @Override
