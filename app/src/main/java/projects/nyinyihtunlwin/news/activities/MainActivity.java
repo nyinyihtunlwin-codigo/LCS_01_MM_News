@@ -195,7 +195,7 @@ public class MainActivity extends BaseActivity implements NewsItemDelegate, Load
         if (data != null && data.moveToFirst()) {
             List<NewsVO> newsList = new ArrayList<>();
             do {
-                NewsVO newsVO = NewsVO.parseFromCursor(data);
+                NewsVO newsVO = NewsVO.parseFromCursor(getApplicationContext(),data);
                 newsList.add(newsVO);
             } while (data.moveToNext());
 

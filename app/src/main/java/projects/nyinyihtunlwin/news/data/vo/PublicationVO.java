@@ -1,6 +1,7 @@
 package projects.nyinyihtunlwin.news.data.vo;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -42,5 +43,16 @@ public class PublicationVO {
         contentValues.put(MMNewsContract.PublicationEntry.COLUMN_LOGO, logo);
 
         return contentValues;
+    }
+
+    public static PublicationVO parseFromCursor(Cursor cursor) {
+
+        PublicationVO publication = new PublicationVO();
+
+        publication.publicationId = cursor.getString(cursor.getColumnIndex(MMNewsContract.PublicationEntry.COLUMN_PUBLICATION_ID));
+        publication.title = cursor.getString(cursor.getColumnIndex(MMNewsContract.PublicationEntry.COLUMN_TITLE));
+        publication.logo = cursor.getString(cursor.getColumnIndex(MMNewsContract.PublicationEntry.COLUMN_LOGO));
+
+        return publication;
     }
 }

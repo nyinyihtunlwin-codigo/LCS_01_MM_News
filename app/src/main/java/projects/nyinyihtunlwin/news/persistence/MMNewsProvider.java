@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -26,6 +27,34 @@ public class MMNewsProvider extends ContentProvider {
     public static final int SENT_TO_ACTION = 700;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
+    private static final SQLiteQueryBuilder sNewsWithPublication_IJ, sFavoriteActionsWithActedUser_IJ, sCommentActionsWithActedUser_IJ;
+
+    static {
+        sNewsWithPublication_IJ = new SQLiteQueryBuilder();
+        sNewsWithPublication_IJ.setTables(
+                MMNewsContract.NewsEntry.TABLE_NAME + " INNER JOIN " +
+                        MMNewsContract.PublicationEntry.TABLE_NAME +
+                        " ON " +
+                        MMNewsContract.NewsEntry.TABLE_NAME + "." + MMNewsContract.NewsEntry.COLUMN_PUBLICATIOIN_ID + " = " +
+                        MMNewsContract.PublicationEntry.TABLE_NAME + "." + MMNewsContract.PublicationEntry.COLUMN_PUBLICATION_ID
+        );
+        sFavoriteActionsWithActedUser_IJ = new SQLiteQueryBuilder();
+        sFavoriteActionsWithActedUser_IJ.setTables(
+                MMNewsContract.FavoriteActionEntry.TABLE_NAME + " INNER JOIN " +
+                        MMNewsContract.UserEntry.TABLE_NAME +
+                        " ON " +
+                        MMNewsContract.FavoriteActionEntry.TABLE_NAME + "." + MMNewsContract.FavoriteActionEntry.COLUMN_USER_ID + " = " +
+                        MMNewsContract.UserEntry.TABLE_NAME + "." + MMNewsContract.UserEntry.COLUMN_USER_ID
+        );
+        sCommentActionsWithActedUser_IJ = new SQLiteQueryBuilder();
+        sCommentActionsWithActedUser_IJ.setTables(
+                MMNewsContract.CommentEntry.TABLE_NAME + " INNER JOIN " +
+                        MMNewsContract.UserEntry.TABLE_NAME +
+                        " ON " +
+                        MMNewsContract.CommentEntry.TABLE_NAME + "." + MMNewsContract.CommentEntry.COLUMN_USER_ID + " = " +
+                        MMNewsContract.UserEntry.TABLE_NAME + "." + MMNewsContract.UserEntry.COLUMN_USER_ID
+        );
+    }
 
     private MMNewsDBHelper mDBHelper;
 
@@ -94,13 +123,44 @@ public class MMNewsProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
-        Cursor queryCursor = mDBHelper.getReadableDatabase().query(getTableName(uri),
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                sortOrder);
+        Cursor queryCursor;
+        switch (sUriMatcher.match(uri)) {
+            case NEWS:
+                queryCursor = sNewsWithPublication_IJ.query(mDBHelper.getReadableDatabase(),
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            case FAVORITE_ACTION:
+                queryCursor = sFavoriteActionsWithActedUser_IJ.query(mDBHelper.getReadableDatabase(),
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            case COMMENT_ACTION:
+                queryCursor = sCommentActionsWithActedUser_IJ.query(mDBHelper.getReadableDatabase(),
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            default:
+                queryCursor = mDBHelper.getReadableDatabase().query(getTableName(uri),
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+        }
         if (getContext() != null) {
             queryCursor.setNotificationUri(getContext().getContentResolver(), uri);
         }

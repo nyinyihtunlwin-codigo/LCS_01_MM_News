@@ -1,6 +1,7 @@
 package projects.nyinyihtunlwin.news.data.vo;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -51,5 +52,15 @@ public class CommentVO {
         contentValues.put(MMNewsContract.CommentEntry.COLUMN_USER_ID, actedUser.getUserId());
 
         return contentValues;
+    }
+
+    public static CommentVO parseFromCursor(Cursor cursor) {
+
+        CommentVO commentVO = new CommentVO();
+        commentVO.commentId = cursor.getString(cursor.getColumnIndex(MMNewsContract.CommentEntry.COLUMN_COMMENT_ID));
+        commentVO.comment = cursor.getString(cursor.getColumnIndex(MMNewsContract.CommentEntry.COLUMN_COMMENT));
+        commentVO.commentDate = cursor.getString(cursor.getColumnIndex(MMNewsContract.CommentEntry.COLUMN_COMMENT_DATE));
+        commentVO.actedUser = ActedUserVO.parseFromCursor(cursor);
+        return commentVO;
     }
 }

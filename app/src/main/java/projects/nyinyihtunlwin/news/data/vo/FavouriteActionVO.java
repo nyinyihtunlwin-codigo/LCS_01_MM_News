@@ -1,6 +1,7 @@
 package projects.nyinyihtunlwin.news.data.vo;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -42,5 +43,14 @@ public class FavouriteActionVO {
         contentValues.put(MMNewsContract.FavoriteActionEntry.COLUMN_NEWS_ID, newsId);
 
         return contentValues;
+    }
+
+    public static FavouriteActionVO parseFromCursor(Cursor cursor) {
+        FavouriteActionVO favourite = new FavouriteActionVO();
+        favourite.favouriteId = cursor.getString(cursor.getColumnIndex(MMNewsContract.FavoriteActionEntry.COLUMN_FAVORITE_ID));
+        favourite.favouriteDate = cursor.getString(cursor.getColumnIndex(MMNewsContract.FavoriteActionEntry.COLUMN_FAVORITE_DATE));
+        favourite.actedUser = ActedUserVO.parseFromCursor(cursor);
+
+        return favourite;
     }
 }

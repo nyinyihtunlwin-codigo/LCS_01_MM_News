@@ -1,6 +1,7 @@
 package projects.nyinyihtunlwin.news.data.vo;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -10,7 +11,7 @@ import projects.nyinyihtunlwin.news.persistence.MMNewsContract;
  * Created by Dell on 12/3/2017.
  */
 
-class ActedUserVO {
+public class ActedUserVO {
 
     @SerializedName("user-id")
     private String userId;
@@ -42,5 +43,13 @@ class ActedUserVO {
         contentValues.put(MMNewsContract.UserEntry.COLUMN_PROFILE_IMAGE, profileImage);
 
         return contentValues;
+    }
+
+    public static ActedUserVO parseFromCursor(Cursor cursor) {
+        ActedUserVO actedUser = new ActedUserVO();
+        actedUser.userId = cursor.getString(cursor.getColumnIndex(MMNewsContract.UserEntry.COLUMN_USER_ID));
+        actedUser.userName = cursor.getString(cursor.getColumnIndex(MMNewsContract.UserEntry.COLUMN_USER_NAME));
+        actedUser.profileImage = cursor.getString(cursor.getColumnIndex(MMNewsContract.UserEntry.COLUMN_PROFILE_IMAGE));
+        return actedUser;
     }
 }

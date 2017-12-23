@@ -26,9 +26,7 @@ public class MMNewsDBHelper extends SQLiteOpenHelper {
             MMNewsContract.ImageInNewsEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             MMNewsContract.ImageInNewsEntry.COLUMN_NEWS_ID + " VARCHAR(256), " +
             MMNewsContract.ImageInNewsEntry.COLUMN_IMAGE_URL + " TEXT, " +
-            " UNIQUE (" + MMNewsContract.ImageInNewsEntry.COLUMN_NEWS_ID + ", " +
-            MMNewsContract.ImageInNewsEntry.COLUMN_IMAGE_URL
-            + ") ON CONFLICT REPLACE" +
+            " UNIQUE (" + MMNewsContract.ImageInNewsEntry.COLUMN_IMAGE_URL + ") ON CONFLICT REPLACE" +
             ");";
     private static final String SQL_CREATE_PUBLICATION = "CREATE TABLE " + MMNewsContract.PublicationEntry.TABLE_NAME + " (" +
             MMNewsContract.PublicationEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +

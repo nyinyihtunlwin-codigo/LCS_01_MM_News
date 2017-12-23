@@ -53,19 +53,32 @@ public class NewsViewHolder extends BaseViewHolder<NewsVO> {
 
     @Override
     public void setData(NewsVO data) {
-/*        StringBuilder sb = new StringBuilder();
-        PublicationVO publicationVO = data.getPublication();
-        tvPublictionName.setText(publicationVO.getTitle());
-        tvPublishDate.setText(data.getPostedDate());*/
-        tvBriefNews.setText(data.getBrief());
-   /*     RequestOptions requestOptions = new RequestOptions()
+        StringBuilder sb = new StringBuilder();
+        RequestOptions requestOptions = new RequestOptions()
                 .placeholder(R.drawable.img_publication_logo_placeholder)
                 .centerCrop();
-        Glide.with(itemView.getRootView().getContext()).load(publicationVO.getLogo()).apply(requestOptions).into(ivPublicationLogo);
+        if (data.getPublication() != null) {
+            PublicationVO publicationVO = data.getPublication();
+            tvPublictionName.setText(publicationVO.getTitle());
+            tvPublishDate.setText(data.getPostedDate());
+            Glide.with(itemView.getRootView().getContext()).load(publicationVO.getLogo()).apply(requestOptions).into(ivPublicationLogo);
+        }
+        tvBriefNews.setText(data.getBrief());
+
+
         if (data.getImages() != null && data.getImages().size() >= 1) {
             Glide.with(itemView.getRootView().getContext()).load(data.getImages().get(0)).apply(requestOptions).into(ivNewsHeroImage);
         } else {
             ivNewsHeroImage.setVisibility(View.GONE);
+        }
+        if (data.getFavourites() != null && data.getFavourites().size() >= 1) {
+            if (data.getFavourites().size() > 1) {
+                sb.append(data.getFavourites().size() + " Likes ");
+            } else {
+                sb.append(data.getFavourites().size() + " Like ");
+            }
+        } else {
+            sb.append("");
         }
         if (data.getComments() != null && data.getComments().size() >= 1) {
             if (data.getSendTos() != null && data.getSendTos().size() >= 1) {
@@ -81,22 +94,15 @@ public class NewsViewHolder extends BaseViewHolder<NewsVO> {
                     sb.append(data.getComments().size() + " Comment");
                 }
             }
-        } else if (data.getSendTos() != null && data.getSendTos().size() >= 1) {
+        }
+        if (data.getSendTos() != null && data.getSendTos().size() >= 1) {
             if (data.getSendTos().size() > 1) {
                 sb.append("Sent to " + data.getSendTos().size() + " people");
             } else {
                 sb.append("Sent to " + data.getSendTos().size() + " person");
             }
-        } else if (data.getFavourites() != null && data.getFavourites().size() >= 1) {
-            if (data.getFavourites().size() > 1) {
-                sb.append(data.getFavourites().size() + " Likes ");
-            } else {
-                sb.append(data.getFavourites().size() + " Like ");
-            }
-        } else {
-            sb.append("");
         }
-        tvNewsStatisticalData.setText(sb.toString());*/
+        tvNewsStatisticalData.setText(sb.toString());
     }
 
     @Override
