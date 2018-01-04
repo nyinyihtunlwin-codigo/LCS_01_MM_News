@@ -27,7 +27,7 @@ public class MMNewsProvider extends ContentProvider {
     public static final int SENT_TO_ACTION = 700;
 
     private static final UriMatcher sUriMatcher = buildUriMatcher();
-    private static final SQLiteQueryBuilder sNewsWithPublication_IJ, sFavoriteActionsWithActedUser_IJ, sCommentActionsWithActedUser_IJ;
+    private static final SQLiteQueryBuilder sNewsWithPublication_IJ, sFavoriteActionsWithActedUser_IJ, sCommentActionsWithActedUser_IJ,sSentToActionsWithUser_IJ;
 
     static {
         sNewsWithPublication_IJ = new SQLiteQueryBuilder();
@@ -53,6 +53,18 @@ public class MMNewsProvider extends ContentProvider {
                         " ON " +
                         MMNewsContract.CommentEntry.TABLE_NAME + "." + MMNewsContract.CommentEntry.COLUMN_USER_ID + " = " +
                         MMNewsContract.UserEntry.TABLE_NAME + "." + MMNewsContract.UserEntry.COLUMN_USER_ID
+        );
+        sSentToActionsWithUser_IJ = new SQLiteQueryBuilder();
+        sSentToActionsWithUser_IJ.setTables(
+                MMNewsContract.SendToEntry.TABLE_NAME + " INNER JOIN " +
+                        MMNewsContract.UserEntry.TABLE_NAME +
+                        " ON " +
+                        MMNewsContract.SendToEntry.TABLE_NAME + "." + MMNewsContract.SendToEntry.COLUMN_SENDER_ID + " = " +
+                        MMNewsContract.UserEntry.TABLE_NAME + "." + MMNewsContract.UserEntry.COLUMN_USER_ID+
+
+                        " INNER JOIN "+ MMNewsContract.UserEntry.TABLE_NAME+" AS au ON "+
+                        MMNewsContract.SendToEntry.TABLE_NAME+"."+ MMNewsContract.SendToEntry.COLUMN_RECEIVER_ID+" = "+
+                        "au."+ MMNewsContract.UserEntry.COLUMN_USER_ID
         );
     }
 
@@ -145,6 +157,15 @@ public class MMNewsProvider extends ContentProvider {
                 break;
             case COMMENT_ACTION:
                 queryCursor = sCommentActionsWithActedUser_IJ.query(mDBHelper.getReadableDatabase(),
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            case SENT_TO_ACTION:
+                queryCursor = sSentToActionsWithUser_IJ.query(mDBHelper.getReadableDatabase(),
                         projection,
                         selection,
                         selectionArgs,

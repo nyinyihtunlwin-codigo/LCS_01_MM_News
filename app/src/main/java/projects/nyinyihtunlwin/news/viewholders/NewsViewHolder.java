@@ -44,6 +44,8 @@ public class NewsViewHolder extends BaseViewHolder<NewsVO> {
     @BindView(R.id.tv_news_statistical_data)
     TextView tvNewsStatisticalData;
 
+    private NewsVO mData;
+
 
     public NewsViewHolder(final View itemView, final NewsItemDelegate newsItemDelegate) {
         super(itemView);
@@ -53,6 +55,7 @@ public class NewsViewHolder extends BaseViewHolder<NewsVO> {
 
     @Override
     public void setData(NewsVO data) {
+        mData = data;
         StringBuilder sb = new StringBuilder();
         RequestOptions requestOptions = new RequestOptions()
                 .placeholder(R.drawable.img_publication_logo_placeholder)
@@ -81,19 +84,13 @@ public class NewsViewHolder extends BaseViewHolder<NewsVO> {
             sb.append("");
         }
         if (data.getComments() != null && data.getComments().size() >= 1) {
-            if (data.getSendTos() != null && data.getSendTos().size() >= 1) {
-                if (data.getFavourites() != null && data.getFavourites().size() >= 1) {
-                    sb.append(data.getFavourites().size() + " Likes " + data.getComments().size() + "- Comments - Sent to " + data.getSendTos().size() + " people");
-                } else {
-                    sb.append(data.getComments().size() + " Comments - Sent to " + data.getSendTos().size() + " people");
-                }
+
+            if (data.getComments().size() > 1) {
+                sb.append(data.getComments().size() + " Comments ");
             } else {
-                if (data.getComments().size() > 1) {
-                    sb.append(data.getComments().size() + " Comments");
-                } else {
-                    sb.append(data.getComments().size() + " Comment");
-                }
+                sb.append(data.getComments().size() + " Comment ");
             }
+
         }
         if (data.getSendTos() != null && data.getSendTos().size() >= 1) {
             if (data.getSendTos().size() > 1) {
@@ -107,7 +104,7 @@ public class NewsViewHolder extends BaseViewHolder<NewsVO> {
 
     @Override
     public void onClick(View view) {
-        //  mNewsItemDelegate.onTapNews(itemView);
+        mNewsItemDelegate.onTapNews(itemView, mData);
         EventBus.getDefault().post(new TapNewsEvent("news_id"));
     }
 }

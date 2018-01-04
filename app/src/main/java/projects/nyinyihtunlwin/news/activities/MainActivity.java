@@ -88,7 +88,9 @@ public class MainActivity extends BaseActivity implements NewsItemDelegate, Load
         mSmartScrollListener = new SmartScrollListener(new SmartScrollListener.OnSmartScrollListener() {
             @Override
             public void onListEndReached() {
-                //  Snackbar.make(rvNews, "This is all the data for Now.", Snackbar.LENGTH_LONG).show();
+                Snackbar.make(rvNews, "Loading new data.", Snackbar.LENGTH_LONG).show();
+                swipeRefreshLayout.setRefreshing(true);
+
                 NewsModel.getInstance().loadMoreNews(getApplicationContext());
             }
         });
@@ -125,8 +127,8 @@ public class MainActivity extends BaseActivity implements NewsItemDelegate, Load
     }
 
     @Override
-    public void onTapNews(View view) {
-        Intent intent = NewsDetailsActivity.newIntent(getApplicationContext());
+    public void onTapNews(View view,NewsVO newsVO) {
+        Intent intent = NewsDetailsActivity.newIntent(getApplicationContext(),newsVO.getNewsId());
         ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
                 // the context of the activity
                 MainActivity.this,
@@ -158,8 +160,8 @@ public class MainActivity extends BaseActivity implements NewsItemDelegate, Load
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onTapNewsEvent(TapNewsEvent event) {
-        Intent intent = NewsDetailsActivity.newIntent(getApplicationContext());
-        startActivity(intent);
+/*        Intent intent = NewsDetailsActivity.newIntent(getApplicationContext());
+        startActivity(intent);*/
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -195,13 +197,12 @@ public class MainActivity extends BaseActivity implements NewsItemDelegate, Load
         if (data != null && data.moveToFirst()) {
             List<NewsVO> newsList = new ArrayList<>();
             do {
-                NewsVO newsVO = NewsVO.parseFromCursor(getApplicationContext(),data);
+                NewsVO newsVO = NewsVO.parseFromCursor(getApplicationContext(), data);
                 newsList.add(newsVO);
             } while (data.moveToNext());
 
             newsAdapter.setNewData(newsList);
             swipeRefreshLayout.setRefreshing(false);
-
         }
     }
 

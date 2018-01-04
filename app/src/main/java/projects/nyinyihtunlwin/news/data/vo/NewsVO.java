@@ -86,6 +86,9 @@ public class NewsVO {
     }
 
     public List<SendToVO> getSendTos() {
+        if (sendTos == null) {
+            sendTos = new ArrayList<>();
+        }
         return sendTos;
     }
 
@@ -112,7 +115,25 @@ public class NewsVO {
         news.images = loadImagesInNews(context, news.newsId);
         news.favourites = loadFavoriteActionsInNews(context, news.newsId);
         news.comments = loadCommentActionsInNews(context, news.newsId);
+        news.sendTos=loadSentToActionsInNews(context,news.newsId);
         return news;
+    }
+
+    private static List<SendToVO> loadSentToActionsInNews(Context context, String newsId) {
+        Cursor sentToActionCursor = context.getContentResolver().query(MMNewsContract.SendToEntry.CONTENT_URI,
+                null,
+                MMNewsContract.SendToEntry.COLUMN_NEWS_ID + " = ?", new String[]{newsId},
+                null);
+        if (sentToActionCursor != null && sentToActionCursor.moveToFirst()) {
+            List<SendToVO> sendToVOList= new ArrayList<>();
+            do {
+                sendToVOList.add(SendToVO.parseFromCursor(sentToActionCursor));
+            } while (sentToActionCursor.moveToNext());
+            sentToActionCursor.close();
+            return sendToVOList;
+        }
+        return null;
+
     }
 
     private static List<CommentVO> loadCommentActionsInNews(Context context, String newsId) {
