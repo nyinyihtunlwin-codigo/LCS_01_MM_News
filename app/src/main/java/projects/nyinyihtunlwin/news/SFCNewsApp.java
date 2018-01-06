@@ -2,6 +2,8 @@ package projects.nyinyihtunlwin.news;
 
 import android.app.Application;
 
+import dagger.android.support.DaggerAppCompatActivity;
+import projects.nyinyihtunlwin.news.dagger.AppComponent;
 import projects.nyinyihtunlwin.news.data.models.NewsModel;
 import projects.nyinyihtunlwin.news.utils.ConfigUtils;
 
@@ -18,5 +20,9 @@ public class SFCNewsApp extends Application {
         super.onCreate();
         ConfigUtils.initConfigUtils(getApplicationContext());
         NewsModel.getInstance().startLoadingMMNews(getApplicationContext());
+    }
+
+    private AppComponent initDagger(SFCNewsApp sfcNewsApp) {
+        return null;
     }
 }

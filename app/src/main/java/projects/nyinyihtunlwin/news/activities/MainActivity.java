@@ -38,9 +38,13 @@ import projects.nyinyihtunlwin.news.data.vo.NewsVO;
 import projects.nyinyihtunlwin.news.delegates.NewsItemDelegate;
 import projects.nyinyihtunlwin.news.events.RestApiEvents;
 import projects.nyinyihtunlwin.news.events.TapNewsEvent;
+import projects.nyinyihtunlwin.news.mvp.presenters.NewsListPresenter;
+import projects.nyinyihtunlwin.news.mvp.views.NewsListView;
 import projects.nyinyihtunlwin.news.persistence.MMNewsContract;
 
-public class MainActivity extends BaseActivity implements NewsItemDelegate, LoaderManager.LoaderCallbacks<Cursor> {
+public class MainActivity
+        extends BaseActivity
+        implements LoaderManager.LoaderCallbacks<Cursor>, NewsListView {
 
     private static final int NEWS_LOADER_ID = 1001;
 
@@ -61,11 +65,17 @@ public class MainActivity extends BaseActivity implements NewsItemDelegate, Load
 
     private SmartScrollListener mSmartScrollListener;
 
+    private NewsListPresenter mPresenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        ButterKnife.bind(this,this);
+
+        mPresenter = new NewsListPresenter(this);
+        mPresenter.onCreate();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -82,7 +92,7 @@ public class MainActivity extends BaseActivity implements NewsItemDelegate, Load
         });
         rvNews.setEmptyView(vpEmptyNews);
         rvNews.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.VERTICAL, false));
-        newsAdapter = new NewsAdapter(getApplicationContext(), this);
+        newsAdapter = new NewsAdapter(getApplicationContext(), mPresenter);
         rvNews.setAdapter(newsAdapter);
 
         mSmartScrollListener = new SmartScrollListener(new SmartScrollListener.OnSmartScrollListener() {
@@ -91,7 +101,7 @@ public class MainActivity extends BaseActivity implements NewsItemDelegate, Load
                 Snackbar.make(rvNews, "Loading new data.", Snackbar.LENGTH_LONG).show();
                 swipeRefreshLayout.setRefreshing(true);
 
-                NewsModel.getInstance().loadMoreNews(getApplicationContext());
+                mPresenter.onNewsListEndReach(getApplicationContext());
             }
         });
         rvNews.addOnScrollListener(mSmartScrollListener);
@@ -99,63 +109,17 @@ public class MainActivity extends BaseActivity implements NewsItemDelegate, Load
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                NewsModel.getInstance().forceRefreshNews(getApplicationContext());
+                mPresenter.onForceRefresh(getApplicationContext());
             }
         });
 
         getSupportLoaderManager().initLoader(NEWS_LOADER_ID, null, this);
     }
-
-    @Override
-    public void onTapComment() {
-
-    }
-
-    @Override
-    public void onTapSentTo() {
-
-    }
-
-    @Override
-    public void onTapFavourite() {
-
-    }
-
-    @Override
-    public void onTapStatistics() {
-
-    }
-
-    @Override
-    public void onTapNews(View view,NewsVO newsVO) {
-        Intent intent = NewsDetailsActivity.newIntent(getApplicationContext(),newsVO.getNewsId());
-        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
-                // the context of the activity
-                MainActivity.this,
-
-                // For each shared element, add to this method a new Pair item,
-                // which contains the reference of the view we are transitioning *from*,
-                // and the value of the transitionName attribute
-                new Pair<View, String>(view.findViewById(R.id.iv_publication_logo),
-                        getString(R.string.transition_name_publication_logo)),
-                new Pair<View, String>(view.findViewById(R.id.tv_publication_name),
-                        getString(R.string.transition_name_publication_name)),
-                new Pair<View, String>(view.findViewById(R.id.tv_publish_date),
-                        getString(R.string.transition_name_publish_date))
-        );
-        ActivityCompat.startActivity(MainActivity.this, intent, options.toBundle());
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
-        List<NewsVO> newsList = NewsModel.getInstance().getNews();
-        if (!newsList.isEmpty()) {
-            newsAdapter.setNewData(newsList);
-        } else {
-            swipeRefreshLayout.setRefreshing(true);
-        }
+        mPresenter.onStart();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -177,9 +141,28 @@ public class MainActivity extends BaseActivity implements NewsItemDelegate, Load
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        mPresenter.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mPresenter.onPause();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
         EventBus.getDefault().unregister(this);
+        mPresenter.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mPresenter.onDestroy();
     }
 
     @Override
@@ -194,20 +177,43 @@ public class MainActivity extends BaseActivity implements NewsItemDelegate, Load
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        if (data != null && data.moveToFirst()) {
-            List<NewsVO> newsList = new ArrayList<>();
-            do {
-                NewsVO newsVO = NewsVO.parseFromCursor(getApplicationContext(), data);
-                newsList.add(newsVO);
-            } while (data.moveToNext());
-
-            newsAdapter.setNewData(newsList);
-            swipeRefreshLayout.setRefreshing(false);
-        }
+       mPresenter.onDataLoaded(getApplicationContext(),data);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    @Override
+    public void displayNewsList(List<NewsVO> newsList) {
+        newsAdapter.setNewData(newsList);
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void showLoding() {
+        swipeRefreshLayout.setRefreshing(true);
+    }
+
+    @Override
+    public void navigateToNewsDetails(NewsVO newsVO) {
+        Intent intent = NewsDetailsActivity.newIntent(getApplicationContext(), newsVO.getNewsId());
+        startActivity(intent);
+ /*       ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+                // the context of the activity
+                MainActivity.this,
+
+                // For each shared element, add to this method a new Pair item,
+                // which contains the reference of the view we are transitioning *from*,
+                // and the value of the transitionName attribute
+                new Pair<View, String>(view.findViewById(R.id.iv_publication_logo),
+                        getString(R.string.transition_name_publication_logo)),
+                new Pair<View, String>(view.findViewById(R.id.tv_publication_name),
+                        getString(R.string.transition_name_publication_name)),
+                new Pair<View, String>(view.findViewById(R.id.tv_publish_date),
+                        getString(R.string.transition_name_publish_date))
+        );
+        ActivityCompat.startActivity(MainActivity.this, intent, options.toBundle());*/
     }
 }
