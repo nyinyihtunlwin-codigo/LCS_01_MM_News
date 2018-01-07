@@ -7,6 +7,9 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import projects.nyinyihtunlwin.news.SFCNewsApp;
 import projects.nyinyihtunlwin.news.data.models.NewsModel;
 import projects.nyinyihtunlwin.news.data.vo.NewsVO;
 import projects.nyinyihtunlwin.news.delegates.NewsItemDelegate;
@@ -16,17 +19,25 @@ import projects.nyinyihtunlwin.news.mvp.views.NewsListView;
  * Created by Dell on 1/6/2018.
  */
 
-public class NewsListPresenter extends BasePresenter implements NewsItemDelegate {
+public class NewsListPresenter extends BasePresenter<NewsListView> implements NewsItemDelegate {
 
-    private NewsListView mView;
+    @Inject
+    NewsModel mNewsModel;
 
-    public NewsListPresenter(NewsListView view) {
-        mView = view;
+    public NewsListPresenter() {
     }
 
     @Override
+    public void onCreate(NewsListView view) {
+        super.onCreate(view);
+        SFCNewsApp context = (SFCNewsApp) mView.getContext();
+        context.getAppComponent().inject(this);
+    }
+
+
+    @Override
     public void onStart() {
-        List<NewsVO> newsList = NewsModel.getInstance().getNews();
+        List<NewsVO> newsList = mNewsModel.getNews();
         if (!newsList.isEmpty()) {
             mView.displayNewsList(newsList);
         } else {
@@ -41,11 +52,11 @@ public class NewsListPresenter extends BasePresenter implements NewsItemDelegate
 
     public void onNewsListEndReach(Context context) {
 
-        NewsModel.getInstance().loadMoreNews(context);
+        mNewsModel.loadMoreNews(context);
     }
 
     public void onForceRefresh(Context context) {
-        NewsModel.getInstance().forceRefreshNews(context);
+        mNewsModel.forceRefreshNews(context);
     }
 
     public void onDataLoaded(Context context, Cursor data) {
@@ -82,6 +93,7 @@ public class NewsListPresenter extends BasePresenter implements NewsItemDelegate
 
     /**
      * Wrong way , don't pass view object
+     *
      * @param view
      * @param newsVO
      */

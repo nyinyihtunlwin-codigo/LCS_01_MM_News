@@ -1,5 +1,6 @@
 package projects.nyinyihtunlwin.news.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -26,9 +27,12 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import projects.nyinyihtunlwin.news.R;
+import projects.nyinyihtunlwin.news.SFCNewsApp;
 import projects.nyinyihtunlwin.news.adapters.NewsAdapter;
 import projects.nyinyihtunlwin.news.components.EmptyViewPod;
 import projects.nyinyihtunlwin.news.components.SmartRecyclerView;
@@ -61,20 +65,23 @@ public class MainActivity
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout swipeRefreshLayout;
 
+    @Inject
+    NewsListPresenter mPresenter;
+
     private NewsAdapter newsAdapter;
 
     private SmartScrollListener mSmartScrollListener;
-
-    private NewsListPresenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this,this);
+        ButterKnife.bind(this, this);
 
-        mPresenter = new NewsListPresenter(this);
-        mPresenter.onCreate();
+        SFCNewsApp applicationContext = (SFCNewsApp) getApplicationContext();
+        applicationContext.getAppComponent().inject(this);
+
+        mPresenter.onCreate(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -115,6 +122,7 @@ public class MainActivity
 
         getSupportLoaderManager().initLoader(NEWS_LOADER_ID, null, this);
     }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -177,7 +185,7 @@ public class MainActivity
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-       mPresenter.onDataLoaded(getApplicationContext(),data);
+        mPresenter.onDataLoaded(getApplicationContext(), data);
     }
 
     @Override
@@ -215,5 +223,10 @@ public class MainActivity
                         getString(R.string.transition_name_publish_date))
         );
         ActivityCompat.startActivity(MainActivity.this, intent, options.toBundle());*/
+    }
+
+    @Override
+    public Context getContext() {
+        return getApplicationContext();
     }
 }

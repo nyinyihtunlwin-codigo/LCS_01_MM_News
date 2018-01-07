@@ -1,5 +1,7 @@
 package projects.nyinyihtunlwin.news.mvp.views;
 
+import android.content.Context;
+
 import java.util.List;
 
 import projects.nyinyihtunlwin.news.data.vo.NewsVO;
@@ -16,4 +18,5 @@ public interface NewsListView {
 
     void navigateToNewsDetails(NewsVO newsVO);
 
+    Context getContext();
 }

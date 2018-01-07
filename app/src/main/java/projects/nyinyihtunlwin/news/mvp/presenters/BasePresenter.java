@@ -4,10 +4,12 @@ package projects.nyinyihtunlwin.news.mvp.presenters;
  * Created by Dell on 1/6/2018.
  */
 
-public abstract class BasePresenter {
+public abstract class BasePresenter<T> {
 
-    public void onCreate() {
+    protected T mView;
 
+    public void onCreate(T view) {
+        mView = view;
     }
 
     public abstract void onStart();
