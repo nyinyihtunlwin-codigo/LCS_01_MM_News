@@ -44,6 +44,17 @@ public class NewsVO {
     @SerializedName("sent-tos")
     private List<SendToVO> sendTos;
 
+    public NewsVO() {
+    }
+
+    public NewsVO(String brief, String details, List<String> images, String postedDate) {
+        this.newsId = String.valueOf(System.currentTimeMillis());
+        this.brief = brief;
+        this.details = details;
+        this.images = images;
+        this.postedDate = postedDate;
+    }
+
     public String getNewsId() {
         return newsId;
     }
@@ -115,7 +126,7 @@ public class NewsVO {
         news.images = loadImagesInNews(context, news.newsId);
         news.favourites = loadFavoriteActionsInNews(context, news.newsId);
         news.comments = loadCommentActionsInNews(context, news.newsId);
-        news.sendTos=loadSentToActionsInNews(context,news.newsId);
+        news.sendTos = loadSentToActionsInNews(context, news.newsId);
         return news;
     }
 
@@ -125,7 +136,7 @@ public class NewsVO {
                 MMNewsContract.SendToEntry.COLUMN_NEWS_ID + " = ?", new String[]{newsId},
                 null);
         if (sentToActionCursor != null && sentToActionCursor.moveToFirst()) {
-            List<SendToVO> sendToVOList= new ArrayList<>();
+            List<SendToVO> sendToVOList = new ArrayList<>();
             do {
                 sendToVOList.add(SendToVO.parseFromCursor(sentToActionCursor));
             } while (sentToActionCursor.moveToNext());
@@ -187,5 +198,9 @@ public class NewsVO {
             return imagesInNews;
         }
         return null;
+    }
+
+    public void setDummyPublication(PublicationVO publicationVO) {
+        this.publication = publicationVO;
     }
 }

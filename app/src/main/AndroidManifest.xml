@@ -30,6 +30,11 @@
         <activity
             android:name=".activities.LoginRegisterActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.AddNewsActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
 
         <receiver android:name=".receiver.InternetStateReceiver">
             <intent-filter>

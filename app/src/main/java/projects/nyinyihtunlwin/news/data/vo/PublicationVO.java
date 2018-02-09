@@ -55,4 +55,12 @@ public class PublicationVO {
 
         return publication;
     }
+
+    public static PublicationVO dummyPublication() {
+        PublicationVO publicationVO = new PublicationVO();
+        publicationVO.publicationId = "pub09";
+        publicationVO.title = "Dummy Title";
+        publicationVO.logo = "\"https://www.mmtimes.com/sites/mmtimes.com/files/styles/mmtimes_ratio_c_three_col/public/default_images/sample-page-02_2.jpg?itok=ox55HGAr\"";
+        return publicationVO;
+    }
 }

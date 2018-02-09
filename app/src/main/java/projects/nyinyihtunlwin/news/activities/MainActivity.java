@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
@@ -18,7 +19,16 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
+
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -48,9 +58,10 @@ import projects.nyinyihtunlwin.news.persistence.MMNewsContract;
 
 public class MainActivity
         extends BaseActivity
-        implements LoaderManager.LoaderCallbacks<Cursor>, NewsListView {
+        implements LoaderManager.LoaderCallbacks<Cursor>, NewsListView, GoogleApiClient.OnConnectionFailedListener {
 
     private static final int NEWS_LOADER_ID = 1001;
+    protected static final int RC_GOOGLE_SIGN_IN = 1236;
 
 
     @BindView(R.id.drawer_layout)
@@ -70,6 +81,8 @@ public class MainActivity
 
     private NewsAdapter newsAdapter;
 
+    protected GoogleApiClient mGoogleApiClient;
+
     private SmartScrollListener mSmartScrollListener;
 
     @Override
@@ -77,6 +90,7 @@ public class MainActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this, this);
+
 
         SFCNewsApp applicationContext = (SFCNewsApp) getApplicationContext();
         applicationContext.getAppComponent().inject(this);
@@ -93,8 +107,14 @@ public class MainActivity
        /*         Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
                 //        drawerLayout.openDrawer(GravityCompat.END); // where to start open (drawer / navigation view)
-                Intent intent = LoginRegisterActivity.newIntent(getApplicationContext());
-                startActivity(intent);
+         /*       Intent intent = LoginRegisterActivity.newIntent(getApplicationContext());
+                startActivity(intent);*/
+                Snackbar.make(rvNews, "You need to sign with Google to publish in MM-News.", Snackbar.LENGTH_INDEFINITE).setAction("Sign-In", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mPresenter.onStartPublishingNews();
+                    }
+                }).show();
             }
         });
         rvNews.setEmptyView(vpEmptyNews);
@@ -121,6 +141,37 @@ public class MainActivity
         });
 
         getSupportLoaderManager().initLoader(NEWS_LOADER_ID, null, this);
+
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("949797302459-m2ep90333cqljjsiub39to7d9j2549di.apps.googleusercontent.com")
+                .requestEmail()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(getApplicationContext())
+                .enableAutoManage(this /*FragmentActivity*/, this /*OnConnectionFailedListener*/)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, googleSignInOptions)
+                .build();
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_GOOGLE_SIGN_IN) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            processGoogleSignInResult(result);
+        }
+    }
+
+    private void processGoogleSignInResult(GoogleSignInResult signInResult) {
+        if (signInResult.isSuccess()) {
+            // Google Sign-In was successful, authenticate with Firebase
+            GoogleSignInAccount account = signInResult.getSignInAccount();
+            mPresenter.onSuccessGoogleSignIn(account);
+        } else {
+            // Google Sign-In failed
+            Log.e(SFCNewsApp.LOG_TAG, "Google Sign-In failed.");
+            Snackbar.make(rvNews, "Your Google sign-in failed.", Snackbar.LENGTH_LONG).show();
+        }
     }
 
     @Override
@@ -228,5 +279,22 @@ public class MainActivity
     @Override
     public Context getContext() {
         return getApplicationContext();
+    }
+
+    @Override
+    public void navigateToAddNewsScreen() {
+        Intent intent = AddNewsActivity.newIntent(getApplicationContext());
+        startActivity(intent);
+    }
+
+    @Override
+    public void signInGoogle() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_GOOGLE_SIGN_IN);
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Toast.makeText(getApplicationContext(), "onConnectionFailed", Toast.LENGTH_SHORT).show();
     }
 }

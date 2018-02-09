@@ -8,6 +8,7 @@ import dagger.Module;
 import dagger.Provides;
 import projects.nyinyihtunlwin.news.SFCNewsApp;
 import projects.nyinyihtunlwin.news.data.models.NewsModel;
+import projects.nyinyihtunlwin.news.mvp.presenters.AddNewsPresenter;
 import projects.nyinyihtunlwin.news.mvp.presenters.NewsListPresenter;
 import projects.nyinyihtunlwin.news.network.MMNewsDataAgent;
 import projects.nyinyihtunlwin.news.network.MMNewsDataAgentImpl;
@@ -32,8 +33,6 @@ public class AppModule {
         return mApp.getApplicationContext();
     }
 
-
-
     @Provides
     @Singleton
     public NewsModel provideNewsModel(Context context) {
@@ -43,6 +42,11 @@ public class AppModule {
     @Provides
     public NewsListPresenter provideNewsListPresenter() {
         return new NewsListPresenter();
+    }
+
+    @Provides
+    public AddNewsPresenter provideAddNewsPresenter() {
+        return new AddNewsPresenter();
     }
 
 }

@@ -2,7 +2,10 @@ package projects.nyinyihtunlwin.news.mvp.presenters;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.View;
+
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,5 +103,27 @@ public class NewsListPresenter extends BasePresenter<NewsListView> implements Ne
     @Override
     public void onTapNews(View view, NewsVO newsVO) {
         mView.navigateToNewsDetails(newsVO);
+    }
+
+    public void onSuccessGoogleSignIn(GoogleSignInAccount signInAccount) {
+        mNewsModel.authenticateUserWithGoogleAccount(signInAccount, new NewsModel.UserAuthenticateDelegate() {
+            @Override
+            public void onSuccessAuthenticate(GoogleSignInAccount signInAccount) {
+                Log.d(SFCNewsApp.LOG_TAG, "onSuccessAuthenticate");
+            }
+
+            @Override
+            public void onFailureAuthenticate(String errrorMsg) {
+                Log.d(SFCNewsApp.LOG_TAG, "onFailureAuthenticate");
+            }
+        });
+    }
+
+    public void onStartPublishingNews() {
+        if(mNewsModel.isUserAuthenticate()){
+            mView.navigateToAddNewsScreen();
+        }else {
+            mView.signInGoogle();
+        }
     }
 }
